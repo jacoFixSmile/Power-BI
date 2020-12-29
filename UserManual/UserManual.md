@@ -5,8 +5,14 @@
     + [2.1 Datasource](#21-datasource)
     + [2.2 Destination](#22-destination)
     + [2.3 Uitzonderingen](#23-uitzonderingen)
-  * [2. Data Cleansing](#2-data-cleansing)
-      - [2.1 Cleansed tabellen aanmaken](#21-cleansed-tabellen-aanmaken)
+  * [3. Data Cleansing](#3-data-cleansing)
+      - [3.1 Cleansed tabellen aanmaken](#31-cleansed-tabellen-aanmaken)
+      - [3.2 Stored Procedures](#32-stored-procedures)
+        * [3.2.1 Stored Procedures Aanmaken](#321-stored-procedures-aanmaken)
+        * [3.2.2 Stored Procedures Uitvoeren](#322-stored-procedures-uitvoeren)
+  * [4. Datawarehouse](#4-datawarehouse)
+    + [4.1 Tabellen aanmaken](#41-tabellen-aanmaken)
+      - [4.2 Data Importeren](#42-data-importeren)
 
 ## 1. Database en schema's aanmaken
 We maken gebruik van 3 database schema's: RAW, ARCHIVE en CLEANSED. Om de database met de bijhorende shema's te creëren voer je de volgende sql code uit in `Microsoft SQL Server Management Studio:`
@@ -413,7 +419,7 @@ EXEC sp_configure 'clr enabled';
 EXEC sp_configure 'clr enabled' , '1';  
 RECONFIGURE;  
 ```
-Vervolgens moet je de CLR C# Functie nog uitvoeren. Open hiervoor "RegularExpressionSQL" en klik hier op "RegularExpressionSQL.sln" dit opent de code voor de regex. Druk nu vanboven op start en selecteer dan de server waar "VisionAirport_OLTP" opstaat en ook deze database functie in je Database te zetten. Als dit errort moet je de connection string nog veranderen. klik in de solution explorer op "Properties" ga naar "Debug" scroll naar beneden en onder "Target Connection string" druk op edit. selecteer weer de correcte server en  "VisionAirport_OLTP", druk vervolgens op ok. Voer nu opnieuw uit door op Start te drukken
+Vervolgens moet je de CLR C# Functie nog uitvoeren. Open hiervoor `RegularExpressionSQL` en klik hier op `RegularExpressionSQL.sln`, dit opent de code voor de regex. Druk nu vanboven op start en selecteer dan de server waar `VisionAirport_OLTP` opstaat en ook de database om de functie eraan toe te voegen. Als dit een error geeft, moet je de connection string nog veranderen. Klik in de solution explorer op `Properties`, ga naar `Debug` en scroll naar beneden. Onder `Target Connection string` drukt u op edit. Selecteer weer de correcte server en  `VisionAirport_OLTP` als database, druk vervolgens op ok. Voer nu opnieuw uit door op Start te drukken.
 
 Om de stored procedures te creëeren voer je de volgende SQL querries uit:
 
@@ -967,10 +973,14 @@ GO
 
 ## 4. Datawarehouse
 ### 4.1 Tabellen aanmaken
-Nu dat u al de data heeft geïmporteerd en alle vuile data uit de tabellen gehaald heeft, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database doet u aan de hand van het volgende SQL script:
+Nu dat u al de data heeft geïmporteerd en alle vuile data uit de tabellen gehaald heeft, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database met bijhorende tabellen doet u aan de hand van de volgende SQL scripts:
 ```SQL
 CREATE DATABASE VisionAirport_DWH
 ```
+
+<details>
+<summary>SQL script om de DWH tabellen aan te maken</summary>
+<p>
 
 ```SQL
 use VisionAirport_DWH;
@@ -1096,5 +1106,9 @@ FOREIGN KEY(KlantID)REFERENCES dim_klant(KlantId),
 PRIMARY KEY(VluchtID)
 );
 ```
+</p>
+</details> 
+
+
 #### 4.2 Data Importeren
 Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de ETLVisonAirport map ETLVisionAirport.sln met Visual Studio 2019. Wacht hier tot het programma geladen is en druk dan start. wacht tot alle flows gedaan zijn met overlopen, dit kan je zien doormiddel van het "V" naast elke flow. De data is nu geinporteerd in je DWH. Je kan dit zoveel herhalen als je wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
