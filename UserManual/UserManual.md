@@ -975,7 +975,7 @@ GO
 ### 4.1 Tabellen aanmaken
 Nu dat u al de data heeft geïmporteerd en alle vuile data uit de tabellen gehaald heeft, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database met bijhorende tabellen doet u aan de hand van de volgende SQL scripts:
 ```SQL
-CREATE DATABASE VisionAirport_DWH
+CREATE DATABASE VisionAirport_DWH;
 ```
 
 <details>
