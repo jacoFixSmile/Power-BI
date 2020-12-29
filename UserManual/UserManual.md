@@ -15,7 +15,7 @@
       - [4.2 Data Importeren](#42-data-importeren)
 
 ## 1. Database en schema's aanmaken
-We maken gebruik van 3 database schema's: RAW, ARCHIVE en CLEANSED. Om de database met de bijhorende shema's te creëren voer je de volgende sql code uit in `Microsoft SQL Server Management Studio:`
+We maken gebruik van 3 database schema's: RAW, ARCHIVE en CLEANSED. Om de database met de bijhorende shema's te creëren, voer je de volgende SQL code uit in `Microsoft SQL Server Management Studio:`
 ```SQL
 CREATE DATABASE VisionAirport_OLTP;
 GO
@@ -27,34 +27,35 @@ GO
 ```
 
 ## 2. Data importeren
-De data die we gaan importeren is afkomstig van een aantal flat files(.txt en .csv). Om deze te importeren maak je gebruik van de `SQL Import and Export Wizard:`
+De data die we gaan importeren is afkomstig uit een aantal flat files (.txt en .csv). Om deze te importeren maak je gebruik van de `SQL Import and Export Wizard:`
 
 <img src="./pictures/ImportExportWizard.png" height="500">
 
 ### 2.1 Datasource
-Aangezien we gebruik maken van flat files duid je dit aan bij de datasource optie:
+Aangezien we gebruik maken van flat files, kies je deze datasource optie:
 
 <img src="./pictures/DatasourceOption.png">
 
-Na het selecteren van het type van de datasource selecteer je de file onder `File name`. Dit doe je door op de `Browse knop` te drukken en je gewenste file te selecteren. U hoeft verder niets aan te passen aan de kolommen dus u kan gewoon op next drukken tot u aankomt bij `Choose a destination`. 
+Na het selecteren van het type van de datasource selecteer je de file onder `File name`. Dit doe je door op de `Browse knop` te drukken en je gewenste file te selecteren. U hoeft verder niets aan te passen aan de kolommen, dus u kan gewoon op next drukken tot u aankomt bij `Choose a destination`. 
 
 ### 2.2 Destination
-Bij de destination combobox scroll je naar onder en selecteert u `Microsoft OLE DB Driver for SQL Server` en als Authentication gebruikt u `Windows Authentication`. Indien u liever gebruik maakt van SQL Authentication kan u dit doen door de username en password in te vullen van uw SQL server. Bij de database selecteerd u de `VisionAirport_OLTP` database die u eerder gecreëerd heeft. 
+Bij de destination combobox scroll je naar onder en selecteert u `Microsoft OLE DB Driver for SQL Server` en als Authentication gebruikt u `Windows Authentication`. Indien u liever gebruik maakt van SQL Authentication, kan u dit doen door de username en password in te vullen van uw SQL server. Bij de database selecteert u de `VisionAirport_OLTP` database die u eerder gecreëerd heeft. 
 
 <img src="./pictures/ChooseDestination.png">
 
-Dan drukt u op next, nu bent u aangekomen bij de `Tables en Views`. Hier zult u het database schema moeten aanpassen van `dbo` naar het database schema `RAW` dat u eerder heeft aangemaakt. Dit doet u door bij destination tussen de `[]` de `dbo` naar `RAW` te veranderen zoals u ziet in onderstaande afbeelding:
+Hierna drukt u op next. Nu bent u gekomen bij de `Tables en Views`. Hier zult u het database schema moeten aanpassen van `dbo` naar het database schema `RAW` dat u eerder heeft aangemaakt. Dit doet u door bij destination tussen de `[]` de `dbo` naar `RAW` te veranderen zoals u ziet in onderstaande afbeelding:
 
 <img src="./pictures/ChangeSchema.png">
 
-In principe kan u nu gewoon op next blijven drukken en het process afronden. Bij de meeste files zul je verder niets moeten aanpassen aan de kolommen etc, sommige datasources zullen een error geven, dit zal u ervaren bij de volgende files: `Export_luchthavens.txt` en `Export_vielgtuigtype.txt`. 
+In principe kan u nu gewoon op next blijven drukken en het process afronden. Bij de meeste files zul je verder niets moeten aanpassen aan de kolommen etc. Sommige datasources zullen een error geven, dit zal u ervaren bij de volgende files: `Export_luchthavens.txt` en `Export_vielgtuigtype.txt`. 
 
 ### 2.3 Uitzonderingen
 
-Aangezien `Export_luchthavens.txt` en `Export_vielgtuigtype.txt` voor errors zullen zorgen moet u de structuur van deze tabellen aanpassen.
-Bij `Export_luchthavens.txt` heeft 2 problemen: `er zijn 2 tabellen met dezelfde naam` en `de kolom Airport wordt getruncate`. Om dit op te lossen doet u het volgende:
+Aangezien `Export_luchthavens.txt` en `Export_vielgtuigtype.txt` voor errors zullen zorgen, moet u de structuur van deze tabellen aanpassen.
 
-Laten we beginnen bij de errors op te lossen van de het bestand `Export_luchthavens`. Bij het kiezen van een datasource, voor dat u op next drukt, moet u eerst naar de `Advanced tab` gaan die zich links in het venster bevindt.
+Bij `Export_luchthavens.txt` zijn er 2 problemen: `er zijn 2 tabellen met dezelfde naam` en `de kolom Airport wordt getruncate`. Om dit op te lossen doet u het volgende:
+
+Laten we beginnen bij de errors op te lossen van het bestand `Export_luchthavens`. Bij het kiezen van een datasource, voor dat u op next drukt, moet u eerst naar de `Advanced tab` gaan die zich links in het venster bevindt.
 
 <img src="./pictures/DatasourceAdvanced.png">
 
@@ -62,16 +63,17 @@ Aangezien er 2 kollomen zijn met dezelfde naam, `TZ` en `Tz`, moeten we bij 1 va
 
 <img src="./pictures/DoubleNameSolution.png">
 
-Om de kolom Airports die getruncate is op te lossen vervangt u het datatype van de kolom naar een `Text stream`. Als de varchar niet als `size max` heeft, verander dit dan in ‘Edit Mappings’
+Om de kolom Airports die getruncate is op te lossen, vervangt u het datatype van de kolom naar een `Text stream`. Als de varchar niet als size `max` heeft, verander dit dan in ‘Edit Mappings’
 
 <img src="./pictures/TruncateSolution.png">
 
-Bij de file `Export_vielgtuigtype.txt` is het enige probleem dat de kolom `Type` wordt getruncate. Dit lost u op op dezeldfde manier zoals u hierboven bij de kolom `Airport` gedaan hebt.
+Bij de file `Export_vielgtuigtype.txt` is het enige probleem dat de kolom `Type` wordt getruncate. Dit lost u op dezelfde manier op zoals u hierboven bij de kolom `Airport` hebt gedaan.
 
 ## 3. Data Cleansing
 
 #### 3.1 Cleansed tabellen aanmaken
-Alle tabellen worden vernoemd met de prefix `tbl` en het `Export_` gedeelte wordt weggehaald. Dus `Export_weer` wordt dan `tblWeer`
+Alle tabellen worden vernoemd met de prefix `tbl` en het `Export_` gedeelte wordt weggelaten. Dus `Export_weer` wordt dan `tblWeer`
+
 Voor het creëeren van de tabellen kan u het volgende SQL script uitvoeren:
 
 <details>
@@ -406,10 +408,11 @@ CREATE TABLE ARCHIVE.weer
 
 #### 3.2 Stored Procedures
 ##### 3.2.1 Stored Procedures Aanmaken
-Aan de hand van stored procedures wordt de data gecleansed. De data wordt gehaald uit de RAW tabellen. De `vuile data` wordt eruit gefiltered met behulp van regex en wordt dan in de ARCHIVE tabellen geplaatst. Nu is de data gecleansed en wordt het dus in de overeenkomstige CLEANSED tabellen geplaatst.
+Aan de hand van stored procedures wordt de data gecleansed. De data wordt gehaald uit de RAW tabellen. De `vuile data` wordt eruit gefilterd met behulp van regex en wordt dan in de ARCHIVE tabellen geplaatst. Nu is de data gecleansed en wordt het dus in de overeenkomstige CLEANSED tabellen geplaatst.
 
-Om de stored procedures zo universeel mogelijk te maken, hebben we gebruik gemaak van Regex. Deze zijn beter in het filteren van de data dan de ingebouwde expresions van SQL, die zeer beperkt zijn. hiervoor zijn we gebruik gaan maken van een zelf geschreven C# CLR functie. 
-Voer daarvoor op je SQL instantie uit 
+Om de stored procedures zo universeel mogelijk te maken, hebben we gebruik gemaak van regex. Deze zijn beter in het filteren van de data dan de ingebouwde expresions van SQL, die zeer beperkt zijn. Hiervoor hebben we gebruik gemaakt van een zelf geschreven C# CLR functie. 
+
+Voer daarvoor volgende code op je SQL instantie uit: 
 
 ```SQL
 EXEC sp_configure 'show advanced options', 1
@@ -419,7 +422,7 @@ EXEC sp_configure 'clr enabled';
 EXEC sp_configure 'clr enabled' , '1';  
 RECONFIGURE;  
 ```
-Vervolgens moet je de CLR C# Functie nog uitvoeren. Open hiervoor `RegularExpressionSQL` en klik hier op `RegularExpressionSQL.sln`, dit opent de code voor de regex. Druk nu vanboven op start en selecteer dan de server waar `VisionAirport_OLTP` opstaat en ook de database om de functie eraan toe te voegen. Als dit een error geeft, moet je de connection string nog veranderen. Klik in de solution explorer op `Properties`, ga naar `Debug` en scroll naar beneden. Onder `Target Connection string` drukt u op edit. Selecteer weer de correcte server en  `VisionAirport_OLTP` als database, druk vervolgens op ok. Voer nu opnieuw uit door op Start te drukken.
+Vervolgens moet je de CLR C# functie nog uitvoeren. Open hiervoor `RegularExpressionSQL` en klik hier op `RegularExpressionSQL.sln`. Dit opent de code voor de regex. Druk nu vanboven op start en selecteer dan de server waar `VisionAirport_OLTP` opstaat en ook de database om de functie eraan toe te voegen. Als dit een error geeft, moet je de connection string nog veranderen. Klik in de solution explorer op `Properties`, ga naar `Debug` en scroll naar beneden. Onder `Target Connection string` drukt u op edit. Selecteer weer de correcte server en  `VisionAirport_OLTP` als database. Druk vervolgens op OK. Voer nu opnieuw uit door op Start te drukken.
 
 Om de stored procedures te creëeren voer je de volgende SQL querries uit:
 
@@ -951,7 +954,7 @@ GO
 
 
 ##### 3.2.2 Stored Procedures Uitvoeren
-Na het aanmaken van de stored procedures moeten ze enkel nog uitgevoerd worden. Dat doet u door het uitvoeren van het volgende SQL script:
+Na het aanmaken van de stored procedures moeten ze enkel nog uitgevoerd worden. Dat doet u door het volgend SQL script uit te voeren:
 
 ```SQL
 USE VisionAirport_OLTP;
@@ -973,7 +976,7 @@ GO
 
 ## 4. Datawarehouse
 ### 4.1 Tabellen aanmaken
-Nu dat u al de data heeft geïmporteerd en alle vuile data uit de tabellen gehaald heeft, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database met bijhorende tabellen doet u aan de hand van de volgende SQL scripts:
+Nu dat u al de data hebt geïmporteerd en alle vuile data uit de tabellen hebt gehaald, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database met bijhorende tabellen doet u aan de hand van de volgende SQL scripts:
 ```SQL
 CREATE DATABASE VisionAirport_DWH
 ```
@@ -1111,4 +1114,4 @@ PRIMARY KEY(VluchtID)
 
 
 #### 4.2 Data Importeren
-Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de ETLVisonAirport map ETLVisionAirport.sln met Visual Studio 2019. Wacht hier tot het programma geladen is en druk dan start. wacht tot alle flows gedaan zijn met overlopen, dit kan je zien doormiddel van het "V" naast elke flow. De data is nu geinporteerd in je DWH. Je kan dit zoveel herhalen als je wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
+Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de ETLVisonAirport map ETLVisionAirport.sln met Visual Studio 2019. Wacht hier tot het programma geladen is en druk dan op start. Wacht tot alle flows gedaan zijn met overlopen, dit kan u zien door middel van de "V" naast elke flow. De data is nu geimporteerd in uw DWH. U kan dit zoveel herhalen als u wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
