@@ -402,6 +402,19 @@ CREATE TABLE ARCHIVE.weer
 ##### 3.2.1 Stored Procedures Aanmaken
 Aan de hand van stored procedures wordt de data gecleansed. De data wordt gehaald uit de RAW tabellen. De `vuile data` wordt eruit gefiltered met behulp van regex en wordt dan in de ARCHIVE tabellen geplaatst. Nu is de data gecleansed en wordt het dus in de overeenkomstige CLEANSED tabellen geplaatst.
 
+Om de stored procedures zo universeel mogelijk te maken, hebben we gebruik gemaak van Regex. Deze zijn beter in het filteren van de data dan de ingebouwde expresions van SQL, die zeer beperkt zijn. hiervoor zijn we gebruik gaan maken van een zelf geschreven C# CLR functie. 
+Voer daarvoor op je SQL instantie uit 
+
+```SQL
+EXEC sp_configure 'show advanced options', 1
+    RECONFIGURE
+	EXEC sp_configure 'clr strict security', 0
+EXEC sp_configure 'clr enabled';  
+EXEC sp_configure 'clr enabled' , '1';  
+RECONFIGURE;  
+```
+Vervolgens moet je de CLR C# Functie nog uitvoeren. Open hiervoor "RegularExpressionSQL" en klik hier op "RegularExpressionSQL.sln" dit opent de code voor de regex. Druk nu vanboven op start en selecteer dan de server waar "VisionAirport_OLTP" opstaat en ook deze database functie in je Database te zetten. Als dit errort moet je de connection string nog veranderen. klik in de solution explorer op "Properties" ga naar "Debug" scroll naar beneden en onder "Target Connection string" druk op edit. selecteer weer de correcte server en  "VisionAirport_OLTP", druk vervolgens op ok. Voer nu opnieuw uit door op Start te drukken
+
 Om de stored procedures te creëeren voer je de volgende SQL querries uit:
 
 [comment]: <> (Stored Prodedure Banen)
@@ -953,6 +966,7 @@ GO
 
 
 ## 4. Datawarehouse
+### 4.1 Tabellen aanmaken
 Nu dat u al de data heeft geïmporteerd en alle vuile data uit de tabellen gehaald heeft, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database doet u aan de hand van het volgende SQL script:
 
 ```SQL
@@ -1079,3 +1093,5 @@ FOREIGN KEY(KlantID)REFERENCES dim_klant(KlantId),
 PRIMARY KEY(VluchtID)
 );
 ```
+#### 4.2 Data Importeren
+Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de ETLVisonAirport map ETLVisionAirport.sln met Visual Studio 2019. Wacht hier tot het programma geladen is en druk dan start. wacht tot alle flows gedaan zijn met overlopen, dit kan je zien doormiddel van het "V" naast elke flow. De data is nu geinporteerd in je DWH. Je kan dit zoveel herhalen als je wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
