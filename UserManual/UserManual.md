@@ -12,7 +12,7 @@
         * [3.2.2 Stored Procedures Uitvoeren](#322-stored-procedures-uitvoeren)
   * [4. Datawarehouse](#4-datawarehouse)
     + [4.1 Tabellen aanmaken](#41-tabellen-aanmaken)
-      - [4.2 Data Importeren](#42-data-importeren)
+    + [4.2 Data Importeren](#42-data-importeren)
 
 ## 1. Database en schema's aanmaken
 We maken gebruik van 3 database schema's: RAW, ARCHIVE en CLEANSED. Om de database met de bijhorende shema's te creëren, voer je de volgende SQL code uit in `Microsoft SQL Server Management Studio:`
@@ -978,7 +978,7 @@ GO
 ### 4.1 Tabellen aanmaken
 Nu dat u al de data hebt geïmporteerd en alle vuile data uit de tabellen hebt gehaald, kan u beginnen met het opstellen van het datawarehouse. Het aanmaken van deze database met bijhorende tabellen doet u aan de hand van de volgende SQL scripts:
 ```SQL
-CREATE DATABASE VisionAirport_DWH
+CREATE DATABASE VisionAirport_DWH;
 ```
 
 <details>
