@@ -12,7 +12,7 @@
         * [3.2.2 Stored Procedures Uitvoeren](#322-stored-procedures-uitvoeren)
   * [4. Datawarehouse](#4-datawarehouse)
     + [4.1 Tabellen aanmaken](#41-tabellen-aanmaken)
-      - [4.2 Data Importeren](#42-data-importeren)
+    + [4.2 Data Importeren](#42-data-importeren)
 
 ## 1. Database en schema's aanmaken
 We maken gebruik van 3 database schema's: RAW, ARCHIVE en CLEANSED. Om de database met de bijhorende shema's te creëren voer je de volgende sql code uit in `Microsoft SQL Server Management Studio:`
