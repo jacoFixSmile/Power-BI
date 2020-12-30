@@ -1114,4 +1114,7 @@ PRIMARY KEY(VluchtID)
 
 
 #### 4.2 Data Importeren
-Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de ETLVisonAirport map ETLVisionAirport.sln met Visual Studio 2019. Wacht hier tot het programma geladen is en druk dan op start. Wacht tot alle flows gedaan zijn met overlopen, dit kan u zien door middel van de "V" naast elke flow. De data is nu geimporteerd in uw DWH. U kan dit zoveel herhalen als u wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
+Voor de data te importeren in een DWH gaan we ETL procedure gerbuiken. Open hiervoor in de `ETLVisonAirport` map `ETLVisionAirport.sln` met `Visual Studio 2019`. Wacht hier tot het programma geladen is en druk dan op start. Wacht tot alle flows gedaan zijn met overlopen, dit kan u zien door middel van de "V" naast elke flow. De data is nu geimporteerd in uw DWH. U kan dit zoveel herhalen als u wilt, hij zal telkens enkel de nieuwe data inladen vanuit de OLTP.   
+
+## 5. Power BI
+Met behulp van Power BI zijn er verschillende repporten beschikbaar. Om deze rapporten te raadplegen, opent u `VisionAirport.pbix`. Hier vindt u een aantal dashboards die u een beter inzicht zullen geven op de data van Vision Airport.
